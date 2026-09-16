@@ -43,7 +43,10 @@ export default async function handler(request, response) {
     })
     return response.status(201).json({ ok: true })
   } catch (error) {
-    console.error('Unable to send RSVP email', error)
+    console.error('Unable to send RSVP email', {
+      code: error.code || 'UNKNOWN',
+      message: error.message || 'No message',
+    })
     return response.status(502).json({ error: 'L’envoi de l’e-mail a échoué.' })
   }
 }
