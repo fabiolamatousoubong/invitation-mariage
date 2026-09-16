@@ -8,6 +8,8 @@ const lastName = ref('')
 const attendance = ref(null)
 const companion = ref('')
 const rsvpSent = ref(false)
+const rsvpSending = ref(false)
+const rsvpError = ref('')
 const activeSection = ref('accueil')
 const language = ref('fr')
 const translations = {
@@ -19,7 +21,7 @@ const translations = {
     schedule: 'Le programme de notre journée', civilTime: '10h45 précises', civil: 'Cérémonie civile', civilText: "Nous nous dirons oui à l'état civil, puis prendrons le temps d'immortaliser ces précieux moments avec nos proches.",
     after: 'Après la cérémonie', toast: 'Un verre aux mariés', toastText: "Retrouvons-nous autour d'un verre pour trinquer ensemble à cette belle nouvelle étape de notre vie.", eveningTime: 'À partir de 20h00', evening: 'La soirée', eveningText: "Nous avons le plaisir de vous offrir une soirée en l'honneur de notre mariage.",
     children: 'Une petite précision concernant les enfants :', childrenText: "en raison du nombre limité de places, nous ne pourrons malheureusement pas accueillir les enfants lors de la soirée. Merci de prévoir leur garde afin que chacun puisse profiter pleinement de ce beau moment.", punctuality: "Nous comptons sur votre ponctualité, à la mairie comme à la soirée, afin que chaque moment se déroule dans les meilleures conditions.",
-    rsvpTitle: 'Partagerez-vous cette journée avec nous ?', deadline: 'Merci de nous confirmer votre présence à la réception au plus tard le 30 septembre 2026.', firstNames: 'Prénoms', firstPlaceholder: 'Entrez vos prénoms', lastName: 'Nom', lastPlaceholder: 'Entrez votre nom', attending: 'Serez-vous présent(e) à la réception ?', yes: 'Avec joie', no: 'Malheureusement non', companion: 'Serez-vous accompagné(e) ?', alone: 'Seul(e)', couple: 'En couple', guest: 'Avec un accompagnant', send: 'Envoyer ma réponse', thanks: 'Merci', recorded: 'Votre réponse est bien enregistrée.', confirmation: 'Nous avons hâte de vous retrouver pour célébrer cette journée.',
+    rsvpTitle: 'Partagerez-vous cette journée avec nous ?', deadline: 'Merci de nous confirmer votre présence à la réception au plus tard le 30 septembre 2026.', firstNames: 'Prénoms', firstPlaceholder: 'Entrez vos prénoms', lastName: 'Nom', lastPlaceholder: 'Entrez votre nom', attending: 'Serez-vous présent(e) à la réception ?', yes: 'Avec joie', no: 'Malheureusement non', companion: 'Serez-vous accompagné(e) ?', alone: 'Seul(e)', couple: 'En couple', guest: 'Avec un accompagnant', send: 'Envoyer ma réponse', thanks: 'Merci', recorded: 'Votre réponse est bien enregistrée.', confirmation: 'Nous avons hâte de vous retrouver pour célébrer cette journée.', incomplete: 'Veuillez renseigner vos prénoms, votre nom et votre réponse.', sendError: "L'envoi a échoué. Réessayez dans quelques instants.",
     giftEyebrow: 'Une pensée pour vous', giftTitle: 'Votre joie à nos côtés rendra cette journée inoubliable.', giftOne: "Réunir les personnes que nous aimons est ce qui compte le plus pour nous. Vos rires, votre bienveillance et les instants partagés donneront toute sa beauté à notre célébration.", giftTwo: "Nous n'avons pas préparé de liste particulière. Si le cœur vous en dit, un présent choisi avec affection sera reçu avec beaucoup de gratitude, mais votre présence est déjà un merveilleux geste pour nous.", paypal: 'Via PayPal', onlineGift: 'Un cadeau en ligne', account: 'Compte', subject: 'Objet', transfer: 'Via virement bancaire', newLife: 'Pour notre nouvelle vie', name: 'Nom', giftSubject: 'Cadeaux mariage de Fabiola et Armel', affection: 'Avec toute notre affection', homeLabel: "Retour à l'accueil"
   },
   de: {
@@ -30,14 +32,41 @@ const translations = {
     schedule: 'Unser Tagesablauf', civilTime: 'Pünktlich um 10:45 Uhr', civil: 'Standesamtliche Trauung', civilText: 'Wir werden uns auf dem Standesamt das Ja-Wort geben und anschließend diese kostbaren Momente mit unseren Liebsten in Bildern festhalten.',
     after: 'Nach der Zeremonie', toast: 'Ein Toast auf das Brautpaar', toastText: 'Anschließend stoßen wir gemeinsam auf diesen schönen neuen Lebensabschnitt an.', eveningTime: 'Ab 20:00 Uhr', evening: 'Die Feier', eveningText: 'Wir freuen uns, euch zu einer Feier anlässlich unserer Hochzeit einzuladen.',
     children: 'Ein Hinweis zu Kindern:', childrenText: 'Da die Anzahl der Plätze begrenzt ist, können wir Kinder leider nicht zur Abendfeier einladen. Bitte organisiert eine Betreuung, damit alle diesen schönen Moment genießen können.', punctuality: 'Wir bitten euch um Pünktlichkeit, sowohl beim Standesamt als auch bei der Feier, damit jeder Moment des Tages reibungslos abläuft.',
-    rsvpTitle: 'Werdet ihr diesen Tag mit uns verbringen?', deadline: 'Bitte bestätigt eure Teilnahme an der Feier bis spätestens 30. September 2026.', firstNames: 'Vornamen', firstPlaceholder: 'Gebt eure Vornamen ein', lastName: 'Nachname', lastPlaceholder: 'Gebt euren Nachnamen ein', attending: 'Werdet ihr an der Feier teilnehmen?', yes: 'Sehr gerne', no: 'Leider nicht', companion: 'Kommt ihr in Begleitung?', alone: 'Allein', couple: 'Als Paar', guest: 'Mit einer Begleitperson', send: 'Antwort senden', thanks: 'Danke', recorded: 'Eure Antwort wurde gespeichert.', confirmation: 'Wir freuen uns darauf, diesen Tag mit euch zu feiern.',
+    rsvpTitle: 'Werdet ihr diesen Tag mit uns verbringen?', deadline: 'Bitte bestätigt eure Teilnahme an der Feier bis spätestens 30. September 2026.', firstNames: 'Vornamen', firstPlaceholder: 'Gebt eure Vornamen ein', lastName: 'Nachname', lastPlaceholder: 'Gebt euren Nachnamen ein', attending: 'Werdet ihr an der Feier teilnehmen?', yes: 'Sehr gerne', no: 'Leider nicht', companion: 'Kommt ihr in Begleitung?', alone: 'Allein', couple: 'Als Paar', guest: 'Mit einer Begleitperson', send: 'Antwort senden', thanks: 'Danke', recorded: 'Eure Antwort wurde gespeichert.', confirmation: 'Wir freuen uns darauf, diesen Tag mit euch zu feiern.', incomplete: 'Bitte gebt eure Vornamen, euren Nachnamen und eure Antwort an.', sendError: 'Das Senden ist fehlgeschlagen. Bitte versucht es erneut.',
     giftEyebrow: 'Ein Gedanke für euch', giftTitle: 'Eure Freude an unserer Seite macht diesen Tag unvergesslich.', giftOne: 'Die Menschen, die wir lieben, um uns zu haben, bedeutet uns alles. Euer Lachen, eure Herzlichkeit und die gemeinsam verbrachte Zeit machen unsere Feier vollkommen.', giftTwo: 'Wir haben keine Geschenkeliste vorbereitet. Wenn ihr möchtet, freuen wir uns über ein mit Liebe ausgewähltes Geschenk. Eure Anwesenheit ist jedoch bereits ein wundervolles Geschenk.', paypal: 'Über PayPal', onlineGift: 'Ein Geschenk online', account: 'Konto', subject: 'Verwendungszweck', transfer: 'Per Banküberweisung', newLife: 'Für unser neues Leben', name: 'Name', giftSubject: 'Hochzeitsgeschenk für Fabiola und Armel', affection: 'Mit all unserer Liebe', homeLabel: 'Zur Startseite'
   }
 }
 const t = computed(() => translations[language.value])
 
-function submitRsvp() {
-  rsvpSent.value = true
+async function submitRsvp() {
+  if (!firstName.value.trim() || !lastName.value.trim() || !attendance.value) {
+    rsvpError.value = t.value.incomplete
+    return
+  }
+
+  rsvpSending.value = true
+  rsvpError.value = ''
+
+  try {
+    const response = await fetch('/api/rsvp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        firstName: firstName.value,
+        lastName: lastName.value,
+        attendance: attendance.value,
+        companion: companion.value,
+        language: language.value,
+      }),
+    })
+
+    if (!response.ok) throw new Error('RSVP failed')
+    rsvpSent.value = true
+  } catch {
+    rsvpError.value = t.value.sendError
+  } finally {
+    rsvpSending.value = false
+  }
 }
 </script>
 
@@ -56,16 +85,21 @@ function submitRsvp() {
             </nav>
             <div class="language-switcher"><button :class="{ active: language === 'fr' }" @click="language = 'fr'">FR</button><span>/</span><button :class="{ active: language === 'de' }" @click="language = 'de'">DE</button></div>
           </header>
-
-          <div id="top" class="hero__intro">
-            <p class="eyebrow">{{ t.wedding }}</p>
-            <h1>{{ couple }}</h1>
-            <p class="hero__date">{{ t.date }} · Berlin</p>
+          <div class="hero-layout">
+            <div class="hero-layout__photo-frame">
+              <img class="hero-layout__photo" src="./assets/WhatsApp Image 2026-09-16 at 20.07.47.jpeg" alt="Fabiola et Armel" />
+            </div>
+            <div class="hero-layout__copy">
+              <p class="eyebrow">{{ t.wedding }}</p>
+              <h1>{{ couple }}</h1>
+              <p class="hero__date">{{ t.date }} · Berlin</p>
+            </div>
           </div>
         </v-container>
       </section>
 
       <section v-if="activeSection === 'histoire'" id="histoire" class="story-section">
+        <span class="floral-accent floral-accent--story" aria-hidden="true"></span>
         <v-container class="story-wrap">
           <div>
             <p class="eyebrow">{{ t.story }}</p>
@@ -164,7 +198,8 @@ function submitRsvp() {
                   variant="outlined"
                   required
                 />
-                <v-btn color="primary" type="submit" block size="large">{{ t.send }}</v-btn>
+                <v-alert v-if="rsvpError" class="mb-4" color="error" variant="tonal">{{ rsvpError }}</v-alert>
+                <v-btn color="primary" type="submit" block size="large" :loading="rsvpSending" :disabled="rsvpSending">{{ t.send }}</v-btn>
               </v-form>
             </v-card-text>
             <v-card-text v-else class="rsvp-confirmation">

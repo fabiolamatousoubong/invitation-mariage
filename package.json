@@ -4,17 +4,24 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "client": "vite",
+    "server": "node server.js",
+    "dev:all": "npm run dev",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "nodemailer": "^10.0.10",
     "sass": "^1.104.1",
     "vue": "^3.5.42",
     "vuetify": "^4.2.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.8",
+    "concurrently": "^10.0.5",
     "vite": "^8.3.0"
   }
 }

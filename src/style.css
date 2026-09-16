@@ -27,13 +27,13 @@ body {
 }
 
 .hero {
-  min-height: 620px;
+  min-height: 780px;
   color: var(--navy);
-  background: var(--powder-light) url('./assets/WhatsApp Image 2026-09-16 at 20.07.47.jpeg') center center / auto 100% no-repeat;
+  background: var(--powder-light);
 }
 
 .hero__content {
-  min-height: 620px;
+  min-height: 780px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -43,18 +43,18 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 28px 12px 20px;
+  padding: 34px 12px 28px;
 }
 
 .monogram {
   border: 1px solid var(--navy);
-  width: 44px;
-  height: 44px;
+  width: 58px;
+  height: 58px;
   display: grid;
   place-items: center;
   color: inherit;
   font-family: Georgia, serif;
-  font-size: 17px;
+  font-size: 21px;
   text-decoration: none;
   background: transparent;
   cursor: pointer;
@@ -62,7 +62,7 @@ body {
 
 nav {
   display: flex;
-  gap: 26px;
+  gap: 34px;
 }
 
 nav button {
@@ -71,7 +71,7 @@ nav button {
   background: transparent;
   color: inherit;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 16px;
   letter-spacing: 0;
   text-decoration: none;
   text-transform: uppercase;
@@ -80,14 +80,14 @@ nav button {
 nav button:hover,
 nav button.active {
   border-bottom: 2px solid var(--powder);
-  color: var(--powder-light);
+  color: var(--navy);
 }
 
 .language-switcher {
   display: flex;
   gap: 6px;
   align-items: center;
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .language-switcher button {
@@ -102,18 +102,94 @@ nav button.active {
 
 .language-switcher button.active {
   border-bottom-color: var(--powder);
-  color: var(--powder-light);
+  color: var(--navy);
 }
 
-.hero__intro {
-  position: absolute;
-  right: 12px;
-  bottom: 0;
-  left: 0;
-  margin: 0;
-  padding: 0;
+.hero-layout {
+  display: grid;
+  grid-template-columns: minmax(360px, 1fr) minmax(400px, 1fr);
+  gap: clamp(36px, 5vw, 80px);
+  align-items: center;
+  flex: 1;
+  padding: 34px 44px 70px;
+}
+
+.hero-layout__photo-frame {
+  position: relative;
+  justify-self: center;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-layout__photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 580px;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero-layout__copy {
+  max-width: 720px;
   animation: reveal 700ms ease-out both;
-  text-shadow: 0 1px 10px rgba(255, 255, 255, 0.7);
+}
+
+.hero-layout__copy .eyebrow {
+  color: var(--powder);
+}
+
+.floral-accent {
+  position: absolute;
+  z-index: 0;
+  width: 58px;
+  height: 58px;
+  opacity: 0.78;
+  pointer-events: none;
+}
+
+.floral-accent::before,
+.floral-accent::after {
+  position: absolute;
+  content: '';
+}
+
+.floral-accent::before {
+  top: 15px;
+  left: 15px;
+  width: 20px;
+  height: 20px;
+  border: 3px solid currentColor;
+  border-radius: 50%;
+  box-shadow: 19px 0 0 -3px var(--powder-light), 19px 0 0 0 currentColor, 0 19px 0 -3px var(--powder-light), 0 19px 0 0 currentColor, 19px 19px 0 -3px var(--powder-light), 19px 19px 0 0 currentColor;
+}
+
+.floral-accent::after {
+  width: 42px;
+  height: 42px;
+  border: 2px solid currentColor;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(45deg);
+}
+
+.floral-accent--pink {
+  top: 22px;
+  left: 9%;
+  color: var(--powder);
+}
+
+.floral-accent--navy {
+  right: 11%;
+  bottom: 18px;
+  color: var(--navy-soft);
+  transform: rotate(18deg);
+}
+
+.hero-details .v-container,
+.story-section .v-container {
+  position: relative;
+  z-index: 1;
 }
 
 .eyebrow,
@@ -134,25 +210,33 @@ h3,
 }
 
 h1 {
-  max-width: 700px;
   margin: 0;
-  font-size: clamp(54px, 8vw, 108px);
-  line-height: 0.95;
+  font-size: clamp(60px, 7vw, 108px);
+  line-height: 0.83;
+  overflow-wrap: anywhere;
 }
 
 .hero__date {
   margin: 24px 0 0;
-  font-size: 20px;
+  font-size: 24px;
 }
 
 .gifts-section {
   background: var(--white);
-  padding: 116px 0 128px;
 }
 
 .story-section {
+  position: relative;
+  overflow: hidden;
   padding: 110px 0;
   background: var(--powder-light);
+}
+
+.floral-accent--story {
+  top: 38px;
+  right: 7%;
+  color: var(--navy-soft);
+  transform: rotate(-24deg) scale(1.2);
 }
 
 .story-wrap {
@@ -508,16 +592,25 @@ footer a {
 @media (max-width: 700px) {
   .hero,
   .hero__content {
-    min-height: 560px;
+    min-height: 0;
   }
 
-  .hero__intro {
-    bottom: 12px;
+  .hero-layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 22px 20px 56px;
   }
 
-  .hero {
-    background-size: 100% auto;
-    background-position: center top;
+  .hero-layout__photo-frame {
+    width: min(100%, 360px);
+  }
+
+  .hero-layout__copy {
+    text-align: center;
+  }
+
+  h1 {
+    font-size: clamp(52px, 15vw, 78px);
   }
 
   .site-header {
