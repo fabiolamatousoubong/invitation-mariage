@@ -7,21 +7,21 @@ import './style.css'
 import App from './App.vue'
 
 const vuetify = createVuetify({
-	components,
-	directives,
-	theme: {
-		defaultTheme: 'weddingTheme',
-		themes: {
-			weddingTheme: {
-				dark: false,
-				colors: {
-					primary: '#17233f',
-					secondary: '#d9a4ad',
-					surface: '#ffffff',
-				},
-			},
-		},
-	},
+  components,
+  directives,
+  theme: {
+    defaultTheme: 'weddingTheme',
+    themes: {
+      weddingTheme: {
+        dark: false,
+        colors: {
+          primary: '#17233f',
+          secondary: '#d9a4ad',
+          surface: '#ffffff',
+        },
+      },
+    },
+  },
 })
 
 createApp(App).use(vuetify).mount('#app')

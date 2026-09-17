@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer'
+import { hasValidSession } from './_auth.js'
 
 const recipient = 'fabiolamatou@gmail.com'
 
@@ -6,6 +7,10 @@ export default async function handler(request, response) {
   if (request.method !== 'POST') {
     response.setHeader('Allow', 'POST')
     return response.status(405).json({ error: 'Méthode non autorisée.' })
+  }
+
+  if (!hasValidSession(request)) {
+    return response.status(401).json({ error: 'Accès non autorisé.' })
   }
 
   const firstName = request.body?.firstName?.trim()
