@@ -15,11 +15,12 @@ export default async function handler(request, response) {
 
   const firstName = request.body?.firstName?.trim()
   const lastName = request.body?.lastName?.trim()
-  const attendance = request.body?.attendance
+  const civilAttendance = request.body?.civilAttendance
+  const eveningAttendance = request.body?.eveningAttendance
   const companion = request.body?.companion?.trim() || 'Non précisé'
   const language = request.body?.language === 'de' ? 'Allemand' : 'Français'
 
-  if (!firstName || !lastName || !['yes', 'no'].includes(attendance)) {
+  if (!firstName || !lastName || !['yes', 'no'].includes(civilAttendance) || !['yes', 'no'].includes(eveningAttendance)) {
     return response.status(400).json({ error: 'Informations RSVP incomplètes.' })
   }
 
@@ -37,14 +38,15 @@ export default async function handler(request, response) {
     },
   })
 
-  const presence = attendance === 'yes' ? 'Oui, avec joie' : 'Non, malheureusement'
+  const civilPresence = civilAttendance === 'yes' ? 'Oui, avec joie' : 'Non, malheureusement'
+  const eveningPresence = eveningAttendance === 'yes' ? 'Oui, avec joie' : 'Non, malheureusement'
 
   try {
     await transporter.sendMail({
       from: process.env.SMTP_FROM || process.env.SMTP_USER,
       to: recipient,
       subject: `RSVP mariage : ${firstName} ${lastName}`,
-      text: `Nouvelle réponse RSVP\n\nPrénoms : ${firstName}\nNom : ${lastName}\nPrésence à la réception : ${presence}\nAccompagnement : ${companion}\nLangue utilisée : ${language}`,
+      text: `Nouvelle réponse RSVP\n\nPrénoms : ${firstName}\nNom : ${lastName}\nPrésence à la mairie : ${civilPresence}\nPrésence à la soirée : ${eveningPresence}\nAccompagnement : ${companion}\nLangue utilisée : ${language}`,
     })
     return response.status(201).json({ ok: true })
   } catch (error) {

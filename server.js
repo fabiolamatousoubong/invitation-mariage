@@ -290,8 +290,11 @@ app.post(
     const lastName =
       request.body.lastName?.trim()
 
-    const attendance =
-      request.body.attendance
+    const civilAttendance =
+      request.body.civilAttendance
+
+    const eveningAttendance =
+      request.body.eveningAttendance
 
     const language =
       request.body.language === 'de'
@@ -302,7 +305,10 @@ app.post(
       !firstName ||
       !lastName ||
       !['yes', 'no'].includes(
-        attendance,
+        civilAttendance,
+      ) ||
+      !['yes', 'no'].includes(
+        eveningAttendance,
       )
     ) {
       return response
@@ -352,8 +358,13 @@ app.post(
           },
         })
 
-      const presence =
-        attendance === 'yes'
+      const civilPresence =
+        civilAttendance === 'yes'
+          ? 'Oui, avec joie'
+          : 'Non, malheureusement'
+
+      const eveningPresence =
+        eveningAttendance === 'yes'
           ? 'Oui, avec joie'
           : 'Non, malheureusement'
 
@@ -372,7 +383,8 @@ app.post(
           '',
           `Prénoms : ${firstName}`,
           `Nom : ${lastName}`,
-          `Présence à la réception : ${presence}`,
+          `Présence à la mairie : ${civilPresence}`,
+          `Présence à la soirée : ${eveningPresence}`,
           `Langue utilisée : ${language}`,
         ].join('\n'),
       })

@@ -5,7 +5,8 @@ const couple = 'Fabiola & Armel'
 const weddingDate = '6 novembre 2026'
 const firstName = ref('')
 const lastName = ref('')
-const attendance = ref(null)
+const civilAttendance = ref(null)
+const eveningAttendance = ref(null)
 const rsvpSent = ref(false)
 const rsvpSending = ref(false)
 const rsvpError = ref('')
@@ -34,10 +35,10 @@ const translations = {
     storySix: "Depuis, notre amour a grandi dans les grands projets comme dans les gestes les plus simples. Il vit dans nos éclats de rire, dans nos prières, dans les encouragements donnés au bon moment et dans cette façon de nous rappeler que nous sommes une équipe. Nous avons connu des défis, des ajustements et des saisons différentes, mais chacun d'eux nous a appris à mieux nous aimer. Armel est devenu mon refuge, mon confident et celui auprès de qui je peux être pleinement moi-même. Ensemble, nous avons découvert que l'amour véritable n'est pas seulement un sentiment magnifique : c'est une décision douce et courageuse que l'on renouvelle chaque jour.",
     storySeven: "Aujourd'hui, lorsque nous regardons le chemin parcouru depuis août 2018, nos cœurs débordent de reconnaissance. Rien de tout cela n'était banal : ni cette mise en contact par un ami, ni ce premier message reçu à l'église, ni ces huit mois pendant lesquels la distance nous a appris à croire l'un en l'autre. Chaque attente, chaque prière et chaque retrouvailles nous ont conduits jusqu'à cette promesse. Le 6 novembre 2026, nous ne célébrerons pas seulement une cérémonie. Nous dirons oui à tout ce que nous avons déjà traversé, à la vie que nous voulons bâtir, aux rêves que nous porterons ensemble et à la grâce de pouvoir avancer côte à côte.",
     storyEight: "Ce oui sera notre façon de dire : je te choisis dans la lumière comme dans les jours plus fragiles ; je choisis de prendre soin de ton cœur, de grandir avec toi et de faire de notre amour un foyer. Et si notre histoire nous a appris une chose, c'est que les plus belles promesses commencent parfois par un simple message. La nôtre a traversé les kilomètres, le temps et l'attente. Elle est devenue une évidence, puis une espérance, et bientôt elle deviendra l'engagement de toute une vie. Avec une émotion immense, nous ouvrons maintenant ce nouveau chapitre, entourés de ceux que nous aimons, le cœur rempli de gratitude et les yeux tournés vers l'avenir.",
-    schedule: 'Le programme de notre journée', civilTime: '10h45 précises', civil: 'Cérémonie civile', civilText: "Nous nous dirons oui à l'état civil, puis prendrons le temps d'immortaliser ces précieux moments avec nos proches.", eveningVenue: 'Lieu de la soirée',
-    after: 'Après la cérémonie', toast: 'Un verre aux mariés', toastText: "Retrouvons-nous autour d'un verre pour trinquer ensemble à cette belle nouvelle étape de notre vie.", eveningTime: 'À partir de 20h00', evening: 'La soirée', eveningText: "Nous avons le plaisir de vous offrir une soirée en l'honneur de notre mariage.",
+    schedule: 'Le programme de notre journée', civilTime: '10h45 précises', civil: 'Cérémonie civile', civilText: "Nous nous dirons oui à l'état civil.", eveningVenue: 'Lieu de la soirée', photoVenue: 'Lieu des photos', photoVenueText: 'Nous nous y retrouverons pour immortaliser ces souvenirs.',
+    after: 'Après la cérémonie', toast: 'Un verre aux mariés', toastText: "Retrouvons-nous autour d'un verre pour trinquer ensemble à cette belle nouvelle étape de notre vie. Après ce moment, nous irons prendre les photos afin d'immortaliser ces précieux souvenirs avec nos proches.", eveningTime: 'À partir de 20h00', evening: 'La soirée', eveningText: "Nous avons le plaisir de vous offrir une soirée en l'honneur de notre mariage.",
     children: 'Une petite précision concernant les enfants :', childrenText: "en raison du nombre limité de places, nous ne pourrons malheureusement pas accueillir les enfants lors de la soirée. Merci de prévoir leur garde afin que chacun puisse profiter pleinement de ce beau moment.", punctuality: "Nous comptons sur votre ponctualité, à la mairie comme à la soirée, afin que chaque moment se déroule dans les meilleures conditions.",
-    rsvpTitle: 'Partagerez-vous cette journée avec nous ?', deadline: 'Merci de nous confirmer votre présence à la réception au plus tard le 30 septembre 2026.', firstNames: 'Prénoms', firstPlaceholder: 'Entrez vos prénoms', lastName: 'Nom', lastPlaceholder: 'Entrez votre nom', attending: 'Serez-vous présent(e) à la réception ?', yes: 'Avec joie', no: 'Malheureusement non', send: 'Envoyer ma réponse', thanks: 'Merci', recorded: 'Votre réponse est bien enregistrée.', confirmation: 'Nous avons hâte de vous retrouver pour célébrer cette journée.', incomplete: 'Veuillez renseigner vos prénoms, votre nom et votre réponse.', sendError: "L'envoi a échoué. Réessayez dans quelques instants.",
+    rsvpTitle: 'Partagerez-vous cette journée avec nous ?', deadline: 'Merci de nous confirmer votre présence au plus tard le 30 septembre 2026.', firstNames: 'Prénoms', firstPlaceholder: 'Entrez vos prénoms', lastName: 'Nom', lastPlaceholder: 'Entrez votre nom', civilAttending: 'Viendrez-vous à la mairie ?', eveningAttending: 'Viendrez-vous à la soirée ?', yes: 'Avec joie', no: 'Malheureusement non', send: 'Envoyer ma réponse', thanks: 'Merci', recorded: 'Votre réponse est bien enregistrée.', confirmation: 'Nous avons hâte de vous retrouver pour célébrer cette journée.', incomplete: 'Veuillez renseigner vos prénoms, votre nom et vos deux réponses.', sendError: "L'envoi a échoué. Réessayez dans quelques instants.",
     giftEyebrow: 'Une pensée pour vous', giftTitle: 'Votre joie à nos côtés rendra cette journée inoubliable.', giftOne: "Réunir les personnes que nous aimons est ce qui compte le plus pour nous. Vos rires, votre bienveillance et les instants partagés donneront toute sa beauté à notre célébration.", giftTwo: "Nous n'avons pas préparé de liste particulière. Si le cœur vous en dit, un présent choisi avec affection sera reçu avec beaucoup de gratitude, mais votre présence est déjà un merveilleux geste pour nous.", paypal: 'Via PayPal', onlineGift: 'Un cadeau en ligne', account: 'Compte', subject: 'Objet', transfer: 'Via virement bancaire', newLife: 'Pour notre nouvelle vie', name: 'Nom', giftSubject: 'Cadeaux mariage de Fabiola et Armel', affection: 'Avec toute notre affection', homeLabel: "Retour à l'accueil", openMaps: 'Ouvrir dans Google Maps'
   },
   de: {
@@ -55,10 +56,10 @@ const translations = {
     storySix: 'Seitdem ist unsere Liebe in großen Plänen ebenso gewachsen wie in den kleinen Gesten des Alltags. Sie lebt in unserem Lachen, in unseren Gebeten, in ermutigenden Worten und in der Gewissheit, ein Team zu sein. Wir haben Herausforderungen, Veränderungen und unterschiedliche Lebensphasen erlebt, doch jede davon hat uns gelehrt, einander besser zu lieben. Armel wurde zu meinem sicheren Ort, meinem Vertrauten und dem Menschen, bei dem ich ganz ich selbst sein darf. Gemeinsam haben wir erfahren, dass wahre Liebe nicht nur ein wunderschönes Gefühl ist, sondern eine sanfte und mutige Entscheidung, die man jeden Tag neu trifft.',
     storySeven: 'Wenn wir heute auf den Weg seit August 2018 zurückblicken, sind unsere Herzen voller Dankbarkeit. Nichts davon war selbstverständlich: weder die Begegnung durch einen Freund noch die erste Nachricht in der Kirche, noch die acht Monate, in denen die Entfernung uns lehrte, aneinander zu glauben. Jedes Warten, jedes Gebet und jedes Wiedersehen hat uns zu diesem Versprechen geführt. Am 6. November 2026 feiern wir nicht nur eine Zeremonie. Wir sagen Ja zu allem, was wir bereits gemeinsam getragen haben, zu dem Leben, das wir aufbauen möchten, und zu der Gnade, Seite an Seite weiterzugehen.',
     storyEight: 'Dieses Ja bedeutet: Ich wähle dich im Licht und an den zerbrechlichen Tagen; ich will dein Herz behüten, mit dir wachsen und aus unserer Liebe ein Zuhause machen. Unsere Geschichte hat uns gezeigt, dass die schönsten Versprechen manchmal mit einer einfachen Nachricht beginnen. Unsere Liebe hat Entfernung, Zeit und Warten überstanden. Sie wurde zu Gewissheit, dann zu Hoffnung und wird nun zum Versprechen eines ganzen Lebens. Mit großer Freude öffnen wir dieses neue Kapitel — umgeben von den Menschen, die wir lieben, voller Dankbarkeit und mit dem Blick auf unsere gemeinsame Zukunft.',
-    schedule: 'Unser Tagesablauf', civilTime: 'Pünktlich um 10:45 Uhr', civil: 'Standesamtliche Trauung', civilText: 'Wir werden uns auf dem Standesamt das Ja-Wort geben und anschließend diese kostbaren Momente mit unseren Liebsten in Bildern festhalten.', eveningVenue: 'Ort der Feier',
-    after: 'Nach der Zeremonie', toast: 'Ein Toast auf das Brautpaar', toastText: 'Anschließend stoßen wir gemeinsam auf diesen schönen neuen Lebensabschnitt an.', eveningTime: 'Ab 20:00 Uhr', evening: 'Die Feier', eveningText: 'Wir freuen uns, euch zu einer Feier anlässlich unserer Hochzeit einzuladen.',
+    schedule: 'Unser Tagesablauf', civilTime: 'Pünktlich um 10:45 Uhr', civil: 'Standesamtliche Trauung', civilText: 'Wir werden uns auf dem Standesamt das Ja-Wort geben.', eveningVenue: 'Ort der Feier', photoVenue: 'Ort fuer die Fotos', photoVenueText: 'Dort treffen wir uns, um diese Erinnerungen festzuhalten.',
+    after: 'Nach der Zeremonie', toast: 'Ein Toast auf das Brautpaar', toastText: 'Anschließend stoßen wir gemeinsam auf diesen schönen neuen Lebensabschnitt an. Danach gehen wir Fotos machen, um diese kostbaren Erinnerungen mit unseren Liebsten festzuhalten.', eveningTime: 'Ab 20:00 Uhr', evening: 'Die Feier', eveningText: 'Wir freuen uns, euch zu einer Feier anlässlich unserer Hochzeit einzuladen.',
     children: 'Ein Hinweis zu Kindern:', childrenText: 'Da die Anzahl der Plätze begrenzt ist, können wir Kinder leider nicht zur Abendfeier einladen. Bitte organisiert eine Betreuung, damit alle diesen schönen Moment genießen können.', punctuality: 'Wir bitten euch um Pünktlichkeit, sowohl beim Standesamt als auch bei der Feier, damit jeder Moment des Tages reibungslos abläuft.',
-    rsvpTitle: 'Werdet ihr diesen Tag mit uns verbringen?', deadline: 'Bitte bestätigt eure Teilnahme an der Feier bis spätestens 30. September 2026.', firstNames: 'Vornamen', firstPlaceholder: 'Gebt eure Vornamen ein', lastName: 'Nachname', lastPlaceholder: 'Gebt euren Nachnamen ein', attending: 'Werdet ihr an der Feier teilnehmen?', yes: 'Sehr gerne', no: 'Leider nicht', send: 'Antwort senden', thanks: 'Danke', recorded: 'Eure Antwort wurde gespeichert.', confirmation: 'Wir freuen uns darauf, diesen Tag mit euch zu feiern.', incomplete: 'Bitte gebt eure Vornamen, euren Nachnamen und eure Antwort an.', sendError: 'Das Senden ist fehlgeschlagen. Bitte versucht es erneut.',
+    rsvpTitle: 'Werdet ihr diesen Tag mit uns verbringen?', deadline: 'Bitte bestätigt eure Teilnahme bis spätestens 30. September 2026.', firstNames: 'Vornamen', firstPlaceholder: 'Gebt eure Vornamen ein', lastName: 'Nachname', lastPlaceholder: 'Gebt euren Nachnamen ein', civilAttending: 'Kommt ihr zum Standesamt?', eveningAttending: 'Kommt ihr zur Abendfeier?', yes: 'Sehr gerne', no: 'Leider nicht', send: 'Antwort senden', thanks: 'Danke', recorded: 'Eure Antwort wurde gespeichert.', confirmation: 'Wir freuen uns darauf, diesen Tag mit euch zu feiern.', incomplete: 'Bitte gebt eure Vornamen, euren Nachnamen und beide Antworten an.', sendError: 'Das Senden ist fehlgeschlagen. Bitte versucht es erneut.',
     giftEyebrow: 'Ein Gedanke für euch', giftTitle: 'Eure Freude an unserer Seite macht diesen Tag unvergesslich.', giftOne: 'Die Menschen, die wir lieben, um uns zu haben, bedeutet uns alles. Euer Lachen, eure Herzlichkeit und die gemeinsam verbrachte Zeit machen unsere Feier vollkommen.', giftTwo: 'Wir haben keine Geschenkeliste vorbereitet. Wenn ihr möchtet, freuen wir uns über ein mit Liebe ausgewähltes Geschenk. Eure Anwesenheit ist jedoch bereits ein wundervolles Geschenk.', paypal: 'Über PayPal', onlineGift: 'Ein Geschenk online', account: 'Konto', subject: 'Verwendungszweck', transfer: 'Per Banküberweisung', newLife: 'Für unser neues Leben', name: 'Name', giftSubject: 'Hochzeitsgeschenk für Fabiola und Armel', affection: 'Mit all unserer Liebe', homeLabel: 'Zur Startseite', openMaps: 'In Google Maps öffnen'
   }
 }
@@ -189,7 +190,7 @@ onBeforeUnmount(() => {
 })
 
 async function submitRsvp() {
-  if (!firstName.value.trim() || !lastName.value.trim() || !attendance.value) {
+  if (!firstName.value.trim() || !lastName.value.trim() || !civilAttendance.value || !eveningAttendance.value) {
     rsvpError.value = t.value.incomplete
     return
   }
@@ -205,7 +206,8 @@ async function submitRsvp() {
       body: JSON.stringify({
         firstName: firstName.value,
         lastName: lastName.value,
-        attendance: attendance.value,
+        civilAttendance: civilAttendance.value,
+        eveningAttendance: eveningAttendance.value,
         language: language.value,
       }),
     })
@@ -351,6 +353,15 @@ async function submitRsvp() {
               <p class="schedule-time">{{ t.after }}</p>
               <div>
                 <h3>{{ t.toast }}</h3><p>{{ t.toastText }}</p>
+                <a class="venue-address" href="https://share.google/m1gqLudFEcJKRKGzx" target="_blank" rel="noopener">
+                  <span class="venue-address__pin" aria-hidden="true">●</span>
+                  <span class="venue-address__content">
+                    <strong>{{ t.photoVenue }}</strong>
+                    <span>Alt-Biesdorf 55<br />12683 Berlin</span>
+                    <span>{{ t.photoVenueText }}</span>
+                    <small>{{ t.openMaps }} →</small>
+                  </span>
+                </a>
               </div>
             </article>
             <article class="schedule-item">
@@ -398,14 +409,25 @@ async function submitRsvp() {
                   hide-details
                   required
                 />
-                <p class="field-label field-label--spaced">{{ t.attending }}</p>
-                <div class="attendance-options" role="radiogroup" :aria-label="t.attending">
+                <p class="field-label field-label--spaced">{{ t.civilAttending }}</p>
+                <div class="attendance-options" role="radiogroup" :aria-label="t.civilAttending">
                   <label>
-                    <input v-model="attendance" type="radio" name="attendance" value="yes" required />
+                    <input v-model="civilAttendance" type="radio" name="civilAttendance" value="yes" required />
                     {{ t.yes }}
                   </label>
                   <label>
-                    <input v-model="attendance" type="radio" name="attendance" value="no" required />
+                    <input v-model="civilAttendance" type="radio" name="civilAttendance" value="no" required />
+                    {{ t.no }}
+                  </label>
+                </div>
+                <p class="field-label field-label--spaced">{{ t.eveningAttending }}</p>
+                <div class="attendance-options" role="radiogroup" :aria-label="t.eveningAttending">
+                  <label>
+                    <input v-model="eveningAttendance" type="radio" name="eveningAttendance" value="yes" required />
+                    {{ t.yes }}
+                  </label>
+                  <label>
+                    <input v-model="eveningAttendance" type="radio" name="eveningAttendance" value="no" required />
                     {{ t.no }}
                   </label>
                 </div>
