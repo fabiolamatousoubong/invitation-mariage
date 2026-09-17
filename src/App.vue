@@ -23,6 +23,7 @@ const translations = {
     home: 'Accueil', story: 'Notre histoire', rsvp: 'RSVP', gifts: 'Cadeaux', wedding: 'Notre mariage',
     menuOpen: 'Ouvrir le menu', menuClose: 'Fermer le menu', mainNavigation: 'Navigation principale', storyGalleryLabel: 'Photos de Fabiola et Armel',
     musicPlay: 'Lancer la musique', musicPause: 'Couper la musique',
+    lockInvitation: 'Revenir au PIN',
     loginLoadingLabel: 'Chargement', loginEyebrow: 'Invitation privée', loginTitle: 'Bienvenue', loginCopy: 'Entrez le code PIN indiqué sur votre invitation pour découvrir notre mariage.', pinLabel: 'Code PIN', pinRequired: 'Veuillez saisir le code PIN.', pinIncorrect: 'Code PIN incorrect.', pinCheckError: 'Impossible de vérifier le code PIN.', verifying: 'Vérification...', openInvitation: "Ouvrir l'invitation",
     date: '6 novembre 2026', storyTitle: 'Une rencontre, une évidence, une promesse.',
     storyOne: "Tout a commencé en août 2018, lorsqu'un ami nous a mis en contact. Il m'a présentée à plusieurs de ses amis vivant dans différentes villes, parmi lesquels se trouvait Armel, le Berlinois. Intrigué, Armel a demandé mon numéro. Lorsque notre ami m'a demandé s'il pouvait le lui transmettre, j'ai accepté.",
@@ -43,6 +44,7 @@ const translations = {
     home: 'Startseite', story: 'Unsere Geschichte', rsvp: 'RSVP', gifts: 'Geschenke', wedding: 'Unsere Hochzeit',
     menuOpen: 'Menü öffnen', menuClose: 'Menü schließen', mainNavigation: 'Hauptnavigation', storyGalleryLabel: 'Fotos von Fabiola und Armel',
     musicPlay: 'Musik starten', musicPause: 'Musik ausschalten',
+    lockInvitation: 'Zur PIN-Seite',
     loginLoadingLabel: 'Wird geladen', loginEyebrow: 'Private Einladung', loginTitle: 'Willkommen', loginCopy: 'Gebt den PIN-Code von eurer Einladung ein, um unsere Hochzeit zu entdecken.', pinLabel: 'PIN-Code', pinRequired: 'Bitte gebt den PIN-Code ein.', pinIncorrect: 'Der PIN-Code ist nicht korrekt.', pinCheckError: 'Der PIN-Code konnte nicht überprüft werden.', verifying: 'Wird geprüft...', openInvitation: 'Einladung öffnen',
     date: '6. November 2026', storyTitle: 'Eine Begegnung, eine Gewissheit, ein Versprechen.',
     storyOne: 'Alles begann im August 2018, als ein Freund uns miteinander bekannt machte. Er stellte mich mehreren seiner Freunde vor, die in verschiedenen Städten lebten, darunter Armel, der Berliner. Neugierig fragte Armel nach meiner Nummer. Als unser Freund mich fragte, ob er sie ihm geben dürfe, sagte ich ja.',
@@ -117,6 +119,24 @@ async function checkAuthentication() {
     authState.value = data.authenticated ? 'authenticated' : 'locked'
   } catch {
     authState.value = 'locked'
+  }
+}
+
+async function lockInvitation() {
+  pauseBackgroundMusic()
+  menuOpen.value = false
+
+  try {
+    await fetch('/api/logout', {
+      method: 'POST',
+      credentials: 'include',
+    })
+  } finally {
+    authState.value = 'locked'
+    pin.value = ''
+    pinError.value = ''
+    await nextTick()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 }
 
@@ -442,6 +462,8 @@ async function submitRsvp() {
         :title="musicPlaying ? t.musicPause : t.musicPlay"
         @click="toggleBackgroundMusic"
       >{{ musicPlaying ? 'II' : '♪' }}</button>
+
+      <button class="lock-toggle" type="button" @click="lockInvitation">{{ t.lockInvitation }}</button>
     </v-main>
   </v-app>
 </template>

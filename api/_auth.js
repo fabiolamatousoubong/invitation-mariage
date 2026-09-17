@@ -112,3 +112,13 @@ export function buildSessionCookie(token) {
     .filter(Boolean)
     .join('; ')
 }
+
+export function buildExpiredSessionCookie() {
+  return [
+    `${sessionCookieName}=`,
+    'HttpOnly',
+    'SameSite=Lax',
+    'Path=/',
+    'Max-Age=0',
+  ].join('; ')
+}
