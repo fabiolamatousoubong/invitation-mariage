@@ -16,10 +16,13 @@ const authState = ref('checking')
 const pin = ref('')
 const pinError = ref('')
 const pinSubmitting = ref(false)
+const backgroundAudio = ref(null)
+const musicPlaying = ref(false)
 const translations = {
   fr: {
     home: 'Accueil', story: 'Notre histoire', rsvp: 'RSVP', gifts: 'Cadeaux', wedding: 'Notre mariage',
     menuOpen: 'Ouvrir le menu', menuClose: 'Fermer le menu', mainNavigation: 'Navigation principale', storyGalleryLabel: 'Photos de Fabiola et Armel',
+    musicPlay: 'Lancer la musique', musicPause: 'Couper la musique',
     loginLoadingLabel: 'Chargement', loginEyebrow: 'Invitation privée', loginTitle: 'Bienvenue', loginCopy: 'Entrez le code PIN indiqué sur votre invitation pour découvrir notre mariage.', pinLabel: 'Code PIN', pinRequired: 'Veuillez saisir le code PIN.', pinIncorrect: 'Code PIN incorrect.', pinCheckError: 'Impossible de vérifier le code PIN.', verifying: 'Vérification...', openInvitation: "Ouvrir l'invitation",
     date: '6 novembre 2026', storyTitle: 'Une rencontre, une évidence, une promesse.',
     storyOne: "Tout a commencé en août 2018, lorsqu'un ami nous a mis en contact. Il m'a présentée à plusieurs de ses amis vivant dans différentes villes, parmi lesquels se trouvait Armel, le Berlinois. Intrigué, Armel a demandé mon numéro. Lorsque notre ami m'a demandé s'il pouvait le lui transmettre, j'ai accepté.",
@@ -39,6 +42,7 @@ const translations = {
   de: {
     home: 'Startseite', story: 'Unsere Geschichte', rsvp: 'RSVP', gifts: 'Geschenke', wedding: 'Unsere Hochzeit',
     menuOpen: 'Menü öffnen', menuClose: 'Menü schließen', mainNavigation: 'Hauptnavigation', storyGalleryLabel: 'Fotos von Fabiola und Armel',
+    musicPlay: 'Musik starten', musicPause: 'Musik ausschalten',
     loginLoadingLabel: 'Wird geladen', loginEyebrow: 'Private Einladung', loginTitle: 'Willkommen', loginCopy: 'Gebt den PIN-Code von eurer Einladung ein, um unsere Hochzeit zu entdecken.', pinLabel: 'PIN-Code', pinRequired: 'Bitte gebt den PIN-Code ein.', pinIncorrect: 'Der PIN-Code ist nicht korrekt.', pinCheckError: 'Der PIN-Code konnte nicht überprüft werden.', verifying: 'Wird geprüft...', openInvitation: 'Einladung öffnen',
     date: '6. November 2026', storyTitle: 'Eine Begegnung, eine Gewissheit, ein Versprechen.',
     storyOne: 'Alles begann im August 2018, als ein Freund uns miteinander bekannt machte. Er stellte mich mehreren seiner Freunde vor, die in verschiedenen Städten lebten, darunter Armel, der Berliner. Neugierig fragte Armel nach meiner Nummer. Als unser Freund mich fragte, ob er sie ihm geben dürfe, sagte ich ja.',
@@ -71,6 +75,39 @@ async function navigateTo(section) {
 
 function closeMenuOnEscape(event) {
   if (event.key === 'Escape') menuOpen.value = false
+}
+
+async function playBackgroundMusic() {
+  if (!backgroundAudio.value || musicPlaying.value) return
+
+  try {
+    backgroundAudio.value.volume = 0.35
+    await backgroundAudio.value.play()
+    musicPlaying.value = true
+    window.removeEventListener('pointerdown', playMusicAfterInteraction)
+    window.removeEventListener('keydown', playMusicAfterInteraction)
+  } catch {
+    musicPlaying.value = false
+  }
+}
+
+function pauseBackgroundMusic() {
+  backgroundAudio.value?.pause()
+  musicPlaying.value = false
+}
+
+function toggleBackgroundMusic() {
+  if (musicPlaying.value) {
+    pauseBackgroundMusic()
+    return
+  }
+
+  playBackgroundMusic()
+}
+
+function playMusicAfterInteraction() {
+  if (authState.value !== 'authenticated') return
+  playBackgroundMusic()
 }
 
 async function checkAuthentication() {
@@ -107,6 +144,8 @@ async function submitPin() {
 
     pin.value = ''
     authState.value = 'authenticated'
+    await nextTick()
+    playBackgroundMusic()
   } catch (error) {
     pinError.value = error.message || t.value.pinCheckError
   } finally {
@@ -116,9 +155,15 @@ async function submitPin() {
 
 onMounted(() => {
   window.addEventListener('keydown', closeMenuOnEscape)
+  window.addEventListener('pointerdown', playMusicAfterInteraction)
+  window.addEventListener('keydown', playMusicAfterInteraction)
   checkAuthentication()
 })
-onBeforeUnmount(() => window.removeEventListener('keydown', closeMenuOnEscape))
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', closeMenuOnEscape)
+  window.removeEventListener('pointerdown', playMusicAfterInteraction)
+  window.removeEventListener('keydown', playMusicAfterInteraction)
+})
 
 async function submitRsvp() {
   if (!firstName.value.trim() || !lastName.value.trim() || !attendance.value) {
@@ -154,6 +199,8 @@ async function submitRsvp() {
 
 <template>
   <v-app :lang="language">
+    <audio ref="backgroundAudio" src="/music/tes-ma-femme-tes-la-plus-belle.mp3" loop preload="auto"></audio>
+
     <v-main v-if="authState === 'checking'" class="login-screen login-screen--loading">
       <div class="login-loader" :aria-label="t.loginLoadingLabel"></div>
     </v-main>
@@ -216,7 +263,7 @@ async function submitRsvp() {
           </header>
           <div class="hero-layout">
             <div class="hero-layout__photo-frame">
-              <img class="hero-layout__photo" src="./assets/WhatsApp Image 2026-09-16 at 20.07.47.jpeg" alt="Fabiola et Armel" />
+              <img class="hero-layout__photo" src="./assets/WhatsApp Image 2026-09-16 at 20.20.23.jpeg" alt="Fabiola et Armel" />
             </div>
             <div class="hero-layout__copy">
               <p class="eyebrow">{{ t.wedding }}</p>
@@ -384,6 +431,14 @@ async function submitRsvp() {
         <strong>{{ couple }}</strong>
         <a href="mailto:fabiolamatou@gmail.com">fabiolamatou@gmail.com</a>
       </footer>
+
+      <button
+        class="music-toggle"
+        type="button"
+        :aria-label="musicPlaying ? t.musicPause : t.musicPlay"
+        :title="musicPlaying ? t.musicPause : t.musicPlay"
+        @click="toggleBackgroundMusic"
+      >{{ musicPlaying ? 'II' : '♪' }}</button>
     </v-main>
   </v-app>
 </template>
