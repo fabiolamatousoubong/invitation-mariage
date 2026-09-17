@@ -128,6 +128,7 @@ async function submitPin() {
 
   pinSubmitting.value = true
   pinError.value = ''
+  const musicStart = playBackgroundMusic()
 
   try {
     const response = await fetch('/api/login', {
@@ -139,9 +140,11 @@ async function submitPin() {
     const data = await response.json().catch(() => ({}))
 
     if (!response.ok) {
+      pauseBackgroundMusic()
       throw new Error(response.status === 401 ? t.value.pinIncorrect : data.error || t.value.pinCheckError)
     }
 
+    await musicStart
     pin.value = ''
     authState.value = 'authenticated'
     await nextTick()
