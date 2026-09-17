@@ -393,7 +393,7 @@ async function submitRsvp() {
           <v-card class="rsvp-card" elevation="0">
             <v-card-text v-if="!rsvpSent">
               <v-form @submit.prevent="submitRsvp">
-                <p class="field-label">{{ t.firstNames }}</p>
+                <p class="field-label field-label--required">{{ t.firstNames }}</p>
                 <v-text-field
                   v-model="firstName"
                   :placeholder="t.firstPlaceholder"
@@ -401,7 +401,7 @@ async function submitRsvp() {
                   hide-details
                   required
                 />
-                <p class="field-label field-label--spaced">{{ t.lastName }}</p>
+                <p class="field-label field-label--spaced field-label--required">{{ t.lastName }}</p>
                 <v-text-field
                   v-model="lastName"
                   :placeholder="t.lastPlaceholder"
@@ -409,7 +409,7 @@ async function submitRsvp() {
                   hide-details
                   required
                 />
-                <p class="field-label field-label--spaced">{{ t.civilAttending }}</p>
+                <p class="field-label field-label--spaced field-label--required">{{ t.civilAttending }}</p>
                 <div class="attendance-options" role="radiogroup" :aria-label="t.civilAttending">
                   <label>
                     <input v-model="civilAttendance" type="radio" name="civilAttendance" value="yes" required />
@@ -420,7 +420,7 @@ async function submitRsvp() {
                     {{ t.no }}
                   </label>
                 </div>
-                <p class="field-label field-label--spaced">{{ t.eveningAttending }}</p>
+                <p class="field-label field-label--spaced field-label--required">{{ t.eveningAttending }}</p>
                 <div class="attendance-options" role="radiogroup" :aria-label="t.eveningAttending">
                   <label>
                     <input v-model="eveningAttendance" type="radio" name="eveningAttendance" value="yes" required />

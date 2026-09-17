@@ -725,6 +725,12 @@ h1 {
   font-size: 14px;
 }
 
+.field-label--required::after {
+  content: ' *';
+  color: #b3263a;
+  font-weight: 700;
+}
+
 .field-label--spaced {
   margin-top: 24px;
 }
